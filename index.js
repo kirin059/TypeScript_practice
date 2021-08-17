@@ -1,25 +1,31 @@
 {
   
     class CoffeeMaker {
-        // 멤버변수(class내에서는 멤버변수에 const 또는 let을 붙이지 않는다, 함수도 마찬가지로 function을 따로 붙이지 않는다)
-        static BEANS_GRAMM_PER_SHOT = 7  // class level  (static을 붙인경우)
-        coffeeBeans = 0;                 // instance (object) level  (static을 안 붙인경우)
+        
+        static BEANS_GRAMM_PER_SHOT = 7  
+        coffeeBeans = 0;                 
 
         constructor(beans) {
-            this.coffeeBeans = beans;
+            this._coffeeBeans = beans;  // js에는 private 기능이 없어서 밑줄로 대신한다
         }
 
-        // makeMachine 함수에 static을 붙였기 때문에 인스턴스에서 사용할 수 없다. 해당 함수를 외부에서 호출하고 싶다면 "변수 maker2" 처럼 가능
         static makeMachine(coffeeBeens) {
             return new CoffeeMaker(coffeeBeens)
         }
+
+        fillCoffeeBeans(beans) {
+            if (beans < 0) {
+                throw new Error('value for beans should be greater than 0')
+            }
+            this.coffeeBeans += beans;
+        }
         
         makeCoffee(shots) {
-            if (this.coffeeBeans < shots * CoffeeMaker.BEANS_GRAMM_PER_SHOT) {  // class level에서 사용(static)하기 때문에 this가 아닌 CoffeeMaker(class이름)를 붙여줌
+            if (this.coffeeBeans < shots * CoffeeMaker.BEANS_GRAMM_PER_SHOT) {  
                 throw new Error('Not enough coffee beans!');
             }
             this.coffeeBeans -= shots * CoffeeMaker.BEANS_GRAMM_PER_SHOT;
-            console.log(this.coffeeBeans)
+  
             return {
                 shots,
                 hasMilk: false,
@@ -27,9 +33,51 @@
         };
     }
 
-    const maker = new CoffeeMaker(32)  // maker안에는 커피콩이 32개 전달된다
-    console.log(maker.makeCoffee(2))
+    const maker = CoffeeMaker.makeMachine(32) 
+    console.log(maker.coffeeBeans)
     // const maker2 = CoffeeMaker.makeMachine(3)   // 생성자 함수를 통해 호출하는 것이 아니라 "클래스에서 직접 함수 호출"
     // console.log(maker2)
     // console.log(CoffeeMaker.makeMachine(4))
+
+
+
+
+    // getter & setter
+    class User {
+        firstName;
+        lastName;
+        //fullName;   fullName을 변수 말고 getter를 통해 함수로 정의한다 (호출할때는 객체 호출하듯 user.fullName)
+        get fullName() {
+            return `${this.firstName} ${this.lastName}`;
+        }
+        constructor(firstName, lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            //this.fullName = `${firstName} ${lastName}`
+        }
+
+        // getter와 setter 설정하기 
+        // getter: class내부에 설정해놓은 getter는 외부에서 호출해서 오직 읽을 수 만 있다
+        // setter: class내부에 설정해놓은 setter는 외부에서 값을 변경하여 적용시킬 수 있다
+        internalAge = 4;
+        get age() {
+            return this.internalAge;
+        }
+        set age(num) {
+            if (num < 0) {
+                throw new Error('no');
+            }
+            this.internalAge = num;
+        }
+    }
+
+    const user = new User('steve', 'jobs');
+    console.log(user.fullName); // steve jobs
+    user.firstName = 'biba';
+    console.log(user.fullName) // steve jobs
+
+    // user.internalAge  << 접근불가
+    user.age = 6;
+    console.log(user.age)
+
 }

@@ -10,8 +10,8 @@
 
     class CoffeeMaker {
         // 내부 상태를 private하게 지정(외부에서 접근 불가)
-        private static BEANS_GRAMM_PER_SHOT: number = 7  
-        private coffeeBeans: number = 0;                
+        private static BEANS_GRAMM_PER_SHOT: number = 7
+        private coffeeBeans: number = 0;
 
         private constructor(beans: number) {
             this.coffeeBeans = beans;
@@ -34,7 +34,7 @@
             if (this.coffeeBeans < shots * CoffeeMaker.BEANS_GRAMM_PER_SHOT) {  // class level에서 사용(static)하기 때문에 this가 아닌 CoffeeMaker(class이름)를 붙여줌
                 throw new Error('Not enough coffee beans!');
             }
-            this.coffeeBeans -= shots * CoffeeMaker.BEANS_GRAMM_PER_SHOT;  
+            this.coffeeBeans -= shots * CoffeeMaker.BEANS_GRAMM_PER_SHOT;
             return {
                 shots,
                 hasMilk: false,
@@ -43,5 +43,7 @@
 
     }
 
-    const maker = new CoffeeMaker(32)  // constructor를 private으로 지정해놓아서 new 생성자로 불러올 수 없다.
+    // const maker = new CoffeeMaker(32)  // constructor를 private으로 지정해놓아서 new 생성자로 불러올 수 없다.
     const maker1 = CoffeeMaker.makeMachine(32)  // 클래스 내부의 static함수를 통해 접근하는 방식으로 객체를 만들 수 있다
+    console.log(maker1)
+}
